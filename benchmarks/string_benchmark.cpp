@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-static void BM_StringAppend(benchmark::State& state)
+static void String_StringAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -19,9 +19,9 @@ static void BM_StringAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_StringAppend);
+BENCHMARK(String_StringAppend);
 
-static void BM_StringstreamAppend(benchmark::State& state)
+static void String_StringstreamAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -38,9 +38,9 @@ static void BM_StringstreamAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_StringstreamAppend);
+BENCHMARK(String_StringstreamAppend);
 
-static void BM_OstringstreamAppend(benchmark::State& state)
+static void String_OstringstreamAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -57,7 +57,7 @@ static void BM_OstringstreamAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_OstringstreamAppend);
+BENCHMARK(String_OstringstreamAppend);
 
 
 

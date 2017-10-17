@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-static void BM_StringAppend(benchmark::State& state)
+static void Bool_StringAppend(benchmark::State& state)
 {
     while (state.KeepRunning())
     {
@@ -14,9 +14,9 @@ static void BM_StringAppend(benchmark::State& state)
         }
     }
 }
-BENCHMARK(BM_StringAppend);
+BENCHMARK(Bool_StringAppend);
 
-static void BM_StringstreamAppend(benchmark::State& state)
+static void Bool_StringstreamAppend(benchmark::State& state)
 {
 
     while (state.KeepRunning())
@@ -28,9 +28,9 @@ static void BM_StringstreamAppend(benchmark::State& state)
         }
     }
 }
-BENCHMARK(BM_StringstreamAppend);
+BENCHMARK(Bool_StringstreamAppend);
 
-static void BM_OstringstreamAppend(benchmark::State& state)
+static void Bool_OstringstreamAppend(benchmark::State& state)
 {
 
     while (state.KeepRunning())
@@ -42,7 +42,7 @@ static void BM_OstringstreamAppend(benchmark::State& state)
         }
     }
 }
-BENCHMARK(BM_OstringstreamAppend);
+BENCHMARK(Bool_OstringstreamAppend);
 
 
 
