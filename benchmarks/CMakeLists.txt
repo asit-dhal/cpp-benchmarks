@@ -1,0 +1,23 @@
+find_package(Threads REQUIRED)
+
+add_library(benchmark::benchmark ALIAS benchmark)
+
+add_executable(string_benchmark string_benchmark.cpp)
+target_link_libraries(string_benchmark
+	benchmark::benchmark
+)
+
+add_executable(int_benchmark int_benchmark.cpp)
+target_link_libraries(int_benchmark
+	benchmark::benchmark
+)
+
+add_executable(double_benchmark double_benchmark.cpp)
+target_link_libraries(double_benchmark
+	benchmark::benchmark
+)
+
+add_executable(bool_benchmark bool_benchmark.cpp)
+target_link_libraries(bool_benchmark
+	benchmark::benchmark
+)
