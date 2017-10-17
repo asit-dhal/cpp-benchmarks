@@ -4,43 +4,43 @@
 
 static void BM_StringAppend(benchmark::State& state)
 {
-  	while (state.KeepRunning())
-  	{
-  		std::string str = "";
-  		for(auto i = 0; i < 20000; i++)
-  		{
+    while (state.KeepRunning())
+    {
+        std::string str = "";
+        for(auto i = 0; i < 20000; i++)
+        {
 
-    		str += std::to_string(false);
-    	}
-  	}
+            str += std::to_string(false);
+        }
+    }
 }
 BENCHMARK(BM_StringAppend);
 
 static void BM_StringstreamAppend(benchmark::State& state)
 {
 
-  	while (state.KeepRunning())
-  	{
-		std::stringstream ss;
-    	for(auto i = 0; i < 20000; i++)
-  		{
-    		ss << false;
-    	}
-  	}
+    while (state.KeepRunning())
+    {
+        std::stringstream ss;
+        for(auto i = 0; i < 20000; i++)
+        {
+            ss << false;
+        }
+    }
 }
 BENCHMARK(BM_StringstreamAppend);
 
 static void BM_OstringstreamAppend(benchmark::State& state)
 {
 
-  	while (state.KeepRunning())
-  	{
-  		std::ostringstream ss;
-    	for(auto i = 0; i < 20000; i++)
-  		{
-    		ss << false;
-    	}
-  	}
+    while (state.KeepRunning())
+    {
+        std::ostringstream ss;
+        for(auto i = 0; i < 20000; i++)
+        {
+            ss << false;
+        }
+    }
 }
 BENCHMARK(BM_OstringstreamAppend);
 
