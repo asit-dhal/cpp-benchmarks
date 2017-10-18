@@ -4,10 +4,10 @@
 
 static void String_StringAppend(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::string str = "";
-        for(auto i = 0; i < 200000; i++)
+        for(auto i = 0; i < count; i++)
         {
             str += "one";
         }
@@ -16,17 +16,18 @@ static void String_StringAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string str = benchmark(state.range(0));
+        (void)str;
     }
 }
-BENCHMARK(String_StringAppend);
+BENCHMARK(String_StringAppend)->RangeMultiplier(2)->Range(8, 8<<10);
 
 static void String_StringstreamAppend(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::stringstream ss;
-        for(auto i = 0; i < 200000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << "one";
         }
@@ -35,17 +36,18 @@ static void String_StringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string str = benchmark(state.range(0));
+        (void)str;
     }
 }
-BENCHMARK(String_StringstreamAppend);
+BENCHMARK(String_StringstreamAppend)->RangeMultiplier(2)->Range(8, 8<<10);
 
 static void String_OstringstreamAppend(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::ostringstream ss;
-        for(auto i = 0; i < 200000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << "one";
         }
@@ -54,11 +56,10 @@ static void String_OstringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string str = benchmark(state.range(0));
+        (void)str;
     }
 }
-BENCHMARK(String_OstringstreamAppend);
-
-
+BENCHMARK(String_OstringstreamAppend)->RangeMultiplier(2)->Range(8, 8<<10);
 
 BENCHMARK_MAIN()
