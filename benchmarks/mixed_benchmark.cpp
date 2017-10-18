@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 
-static void BM_StringAppend(benchmark::State& state)
+static void Mixed_StringAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -19,12 +19,12 @@ static void BM_StringAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_StringAppend)->ComputeStatistics("max",
+BENCHMARK(Mixed_StringAppend)->ComputeStatistics("max",
   [](const std::vector<double>& v) -> double {
     return *(std::max_element(std::begin(v), std::end(v)));
   })->Arg(512);
 
-static void BM_StringstreamAppend(benchmark::State& state)
+static void Mixed_StringstreamAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -40,9 +40,9 @@ static void BM_StringstreamAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_StringstreamAppend);
+BENCHMARK(Mixed_StringstreamAppend);
 
-static void BM_OstringstreamAppend(benchmark::State& state)
+static void Mixed_OstringstreamAppend(benchmark::State& state)
 {
     auto benchmark = []() -> std::string
     {
@@ -58,6 +58,6 @@ static void BM_OstringstreamAppend(benchmark::State& state)
         benchmark();
     }
 }
-BENCHMARK(BM_OstringstreamAppend);
+BENCHMARK(Mixed_OstringstreamAppend);
 
 BENCHMARK_MAIN()
