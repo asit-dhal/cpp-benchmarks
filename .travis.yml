@@ -1,0 +1,120 @@
+language: generic
+
+dist: trusty
+sudo: required
+
+env:
+  global:
+    - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
+    - CMAKE_VERSION="3.9.1"
+
+cache:
+  directories:
+    - ${DEPS_DIR}/cmake-${CMAKE_VERSION}
+
+matrix:
+    include:
+    - os: linux
+      compiler: gcc
+      env: GCC_VERSION=7
+        - CC=gcc-7
+        - CXX=g++-7
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-7']
+
+    - os: linux
+      compiler: gcc
+      env: GCC_VERSION=6
+        - CC=gcc-6
+        - CXX=g++-6
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+
+    - os: linux
+      compiler: gcc
+      env: GCC_VERSION=5
+        - CC=gcc-5
+        - CXX=g++-5
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+
+    #- os: linux
+    #  compiler: clang
+    #  env: CLANG_VERSION=5.0 LIBCXX=On
+    #    - CC=clang-5.0
+    #    - CXX=clang++-5.0
+    #  addons:
+    #    apt:
+    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
+    #      packages: ['clang-5.0', 'g++-6']
+
+    #- os: linux
+    #  compiler: clang
+    #  env: CLANG_VERSION=4.0 LIBCXX=On
+    #    - CC=clang-4.0
+    #    - CXX=clang++-4.0
+    #  addons:
+    #    apt:
+    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-4.0']
+    #      packages: ['clang-4.0', 'g++-6']
+
+    #- os: linux
+    #  compiler: clang
+    #  env: CLANG_VERSION=3.9 LIBCXX=On
+    #    - CC=clang-3.9
+    #    - CXX=clang++-3.9
+    #  addons:
+    #    apt:
+    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.9']
+    #      packages: ['clang-3.9', 'g++-6']
+
+    #- os: linux
+    #  compiler: clang
+    #  env: CLANG_VERSION=3.8 LIBCXX=On
+    #    - CC=clang-3.8
+    #    - CXX=clang++-3.8
+    #  addons:
+    #    apt:
+    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.8']
+    #      packages: ['clang-3.8', 'g++-6']
+
+before_install:
+  - export CHECKOUT_PATH=`pwd`;
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+      if [ -z "$(ls -A ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached)" ]; then
+        CMAKE_URL="https://cmake.org/files/v3.9/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+        mkdir -p ${DEPS_DIR}/cmake-${CMAKE_VERSION}
+        travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C ${DEPS_DIR}/cmake-${CMAKE_VERSION}
+        touch ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached
+      else
+        echo "Using cached cmake version ${CMAKE_VERSION}."
+      fi
+      export PATH="${DEPS_DIR}/cmake-${CMAKE_VERSION}/bin:${PATH}"
+    fi
+  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
+  - if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}"; fi
+  - which $CXX
+  - which $CC
+  - $CXX --version
+  - if [ -n "$CLANG_VERSION" ]; then sudo PATH="${PATH}" CXX="$CXX" CC="$CC" ./install_libcxx.sh; fi
+
+install:
+  - mkdir -p build && cd build
+  - if [ "$GCC_VERSION" == "5" ]; then CXX_FLAGS="${CXX_FLAGS}"; fi
+  - |
+    if [ "$LIBCXX" == "On" ]; then
+      CXX_FLAGS="${CXX_FLAGS} -stdlib=libc++ -nostdinc++ -cxx-isystem /usr/include/c++/v1/ -Wno-unused-command-line-argument"
+      CXX_LINKER_FLAGS="${CXX_LINKER_FLAGS} -lc++abi"
+    fi
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" -DCMAKE_EXE_LINKER_FLAGS="${CXX_LINKER_FLAGS}" -DCMAKE_CROSSCOMPILING=1 -DRUN_HAVE_STD_REGEX=0 -DRUN_HAVE_POSIX_REGEX=0
+  - make -j2 VERBOSE=1
+
+script:
+  - for file in bin/*; do $file; done
