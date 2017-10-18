@@ -44,45 +44,45 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-5']
 
-    #- os: linux
-    #  compiler: clang
-    #  env: CLANG_VERSION=5.0 LIBCXX=On
-    #    - CC=clang-5.0
-    #    - CXX=clang++-5.0
-    #  addons:
-    #    apt:
-    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
-    #      packages: ['clang-5.0', 'g++-6']
+    - os: linux
+      compiler: clang
+      env: CLANG_VERSION=5.0 LIBCXX=On
+        - CC=clang-5.0
+        - CXX=clang++-5.0
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
+          packages: ['clang-5.0', 'g++-6']
 
-    #- os: linux
-    #  compiler: clang
-    #  env: CLANG_VERSION=4.0 LIBCXX=On
-    #    - CC=clang-4.0
-    #    - CXX=clang++-4.0
-    #  addons:
-    #    apt:
-    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-4.0']
-    #      packages: ['clang-4.0', 'g++-6']
+    - os: linux
+      compiler: clang
+      env: CLANG_VERSION=4.0 LIBCXX=On
+        - CC=clang-4.0
+        - CXX=clang++-4.0
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-4.0']
+          packages: ['clang-4.0', 'g++-6']
 
-    #- os: linux
-    #  compiler: clang
-    #  env: CLANG_VERSION=3.9 LIBCXX=On
-    #    - CC=clang-3.9
-    #    - CXX=clang++-3.9
-    #  addons:
-    #    apt:
-    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.9']
-    #      packages: ['clang-3.9', 'g++-6']
+    - os: linux
+      compiler: clang
+      env: CLANG_VERSION=3.9 LIBCXX=On
+        - CC=clang-3.9
+        - CXX=clang++-3.9
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.9']
+          packages: ['clang-3.9', 'g++-6']
 
-    #- os: linux
-    #  compiler: clang
-    #  env: CLANG_VERSION=3.8 LIBCXX=On
-    #    - CC=clang-3.8
-    #    - CXX=clang++-3.8
-    #  addons:
-    #    apt:
-    #      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.8']
-    #      packages: ['clang-3.8', 'g++-6']
+    - os: linux
+      compiler: clang
+      env: CLANG_VERSION=3.8 LIBCXX=On
+        - CC=clang-3.8
+        - CXX=clang++-3.8
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.8']
+          packages: ['clang-3.8', 'g++-6']
 
 before_install:
   - export CHECKOUT_PATH=`pwd`;
@@ -97,6 +97,7 @@ before_install:
         echo "Using cached cmake version ${CMAKE_VERSION}."
       fi
       export PATH="${DEPS_DIR}/cmake-${CMAKE_VERSION}/bin:${PATH}"
+      sudo apt-get install ninja-build
     fi
   - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
   - if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}"; fi
@@ -113,8 +114,8 @@ install:
       CXX_FLAGS="${CXX_FLAGS} -stdlib=libc++ -nostdinc++ -cxx-isystem /usr/include/c++/v1/ -Wno-unused-command-line-argument"
       CXX_LINKER_FLAGS="${CXX_LINKER_FLAGS} -lc++abi"
     fi
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" -DCMAKE_EXE_LINKER_FLAGS="${CXX_LINKER_FLAGS}" -DCMAKE_CROSSCOMPILING=1 -DRUN_HAVE_STD_REGEX=0 -DRUN_HAVE_POSIX_REGEX=0
-  - make -j2 VERBOSE=1
+  - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
+  - ninja -v
 
 script:
   - for file in bin/*; do $file; done
