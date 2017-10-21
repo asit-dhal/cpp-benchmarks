@@ -1,49 +1,69 @@
-#include <benchmark/benchmark.h>
+#include "common.h"
 #include <string>
 #include <sstream>
 
-static void Bool_StringAppend(benchmark::State& state)
+static void PrettyPrintBool_ToString(benchmark::State& state)
 {
-    while (state.KeepRunning())
+
+    auto bennchmark = [](int count) -> std::string
     {
         std::string str = "";
-        for(auto i = 0; i < 20000; i++)
+        for(auto i = 0; i < count; i++)
         {
-
             str += std::to_string(false);
         }
-    }
-}
-BENCHMARK(Bool_StringAppend);
-
-static void Bool_StringstreamAppend(benchmark::State& state)
-{
+        return str;
+    };
 
     while (state.KeepRunning())
+    {
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
+    }
+}
+
+static void PrettyPrintBool_StringStream(benchmark::State& state)
+{
+    auto bennchmark = [](int count) -> std::string
     {
         std::stringstream ss;
-        for(auto i = 0; i < 20000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << false;
         }
-    }
-}
-BENCHMARK(Bool_StringstreamAppend);
-
-static void Bool_OstringstreamAppend(benchmark::State& state)
-{
+        return ss.str();
+    };
 
     while (state.KeepRunning())
     {
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
+    }
+}
+
+static void PrettyPrintBool_OstringStream(benchmark::State& state)
+{
+    auto bennchmark = [](int count) -> std::string
+    {
         std::ostringstream ss;
-        for(auto i = 0; i < 20000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << false;
         }
+        return ss.str();
+
+    };
+
+    while (state.KeepRunning())
+    {
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
+
     }
 }
-BENCHMARK(Bool_OstringstreamAppend);
 
-
+BENCHMARK(PrettyPrintBool_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintBool_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintBool_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
 
 BENCHMARK_MAIN()

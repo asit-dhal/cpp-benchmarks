@@ -1,63 +1,73 @@
-#include <benchmark/benchmark.h>
+#include "common.h"
 #include <string>
 #include <sstream>
 #include <algorithm>
 
-static void Mixed_StringAppend(benchmark::State& state)
+static void PrettyPrintMixed_ToString(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::string str = "";
-        str += std::to_string(10);
-        str += "a simple string";
-        str += std::to_string(10.3);
+		for(auto i = 0; i < count; i++)
+		{
+			str += std::to_string(10);
+			str += "a simple string";
+			str += std::to_string(10.3);
+		}
         return str;
     };
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Mixed_StringAppend)->ComputeStatistics("max",
-  [](const std::vector<double>& v) -> double {
-    return *(std::max_element(std::begin(v), std::end(v)));
-  })->Arg(512);
 
-static void Mixed_StringstreamAppend(benchmark::State& state)
+static void PrettyPrintMixed_StringStream(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::stringstream ss;
-        ss << 10;
-        ss << "a simple string";
-        ss << 10.3;
+		for(auto i = 0; i < count; i++)
+		{
+			ss << 10;
+			ss << "a simple string";
+			ss << 10.3;
+		}
         return ss.str();
     };
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Mixed_StringstreamAppend);
 
-static void Mixed_OstringstreamAppend(benchmark::State& state)
+static void PrettyPrintMixed_OstringStream(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::ostringstream ss;
-        ss << 10;
-        ss << "a simple string";
-        ss << 10.3;
+		for(auto i = 0; i < count; i++)
+		{
+			ss << 10;
+			ss << "a simple string";
+			ss << 10.3;
+		}
         return ss.str();
     };
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Mixed_OstringstreamAppend);
+
+BENCHMARK(PrettyPrintMixed_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintMixed_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintMixed_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
 
 BENCHMARK_MAIN()

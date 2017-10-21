@@ -1,13 +1,13 @@
-#include <benchmark/benchmark.h>
+#include "common.h"
 #include <string>
 #include <sstream>
 
-static void Int_StringAppend(benchmark::State& state)
+static void PrettyPrintInt_ToString(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::string str = "";
-        for(auto i = 0; i < 200000; i++)
+        for(auto i = 0; i < count; i++)
         {
             str += std::to_string(i);
         }
@@ -16,17 +16,17 @@ static void Int_StringAppend(benchmark::State& state)
     
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Int_StringAppend);
 
-static void Int_StringstreamAppend(benchmark::State& state)
+static void PrettyPrintInt_StringStream(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::stringstream ss;
-        for(auto i = 0; i < 20000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << i;
         }
@@ -35,17 +35,17 @@ static void Int_StringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Int_StringstreamAppend);
 
-static void Int_OstringstreamAppend(benchmark::State& state)
+static void PrettyPrintInt_OstringStream(benchmark::State& state)
 {
-    auto benchmark = []() -> std::string
+    auto benchmark = [](int count) -> std::string
     {
         std::ostringstream ss;
-        for(auto i = 0; i < 20000; i++)
+        for(auto i = 0; i < count; i++)
         {
             ss << i;
         }
@@ -54,9 +54,15 @@ static void Int_OstringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        benchmark();
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Int_OstringstreamAppend);
+
+
+BENCHMARK(PrettyPrintInt_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintInt_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintInt_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+
 
 BENCHMARK_MAIN()

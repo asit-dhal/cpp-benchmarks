@@ -1,8 +1,8 @@
-#include <benchmark/benchmark.h>
+#include "common.h"
 #include <string>
 #include <sstream>
 
-static void String_StringAppend(benchmark::State& state)
+static void PrettyPrintString_ToString(benchmark::State& state)
 {
     auto benchmark = [](int count) -> std::string
     {
@@ -16,13 +16,12 @@ static void String_StringAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        std::string str = benchmark(state.range(0));
-        (void)str;
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(String_StringAppend)->RangeMultiplier(2)->Range(8, 8<<10);
 
-static void String_StringstreamAppend(benchmark::State& state)
+static void PrettyPrintString_StringStream(benchmark::State& state)
 {
     auto benchmark = [](int count) -> std::string
     {
@@ -36,13 +35,12 @@ static void String_StringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        std::string str = benchmark(state.range(0));
-        (void)str;
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(String_StringstreamAppend)->RangeMultiplier(2)->Range(8, 8<<10);
 
-static void String_OstringstreamAppend(benchmark::State& state)
+static void PrettyPrintString_OstringStream(benchmark::State& state)
 {
     auto benchmark = [](int count) -> std::string
     {
@@ -56,10 +54,13 @@ static void String_OstringstreamAppend(benchmark::State& state)
 
     while (state.KeepRunning())
     {
-        std::string str = benchmark(state.range(0));
-        (void)str;
+        std::string ret = benchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(String_OstringstreamAppend)->RangeMultiplier(2)->Range(8, 8<<10);
+
+BENCHMARK(PrettyPrintString_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintString_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintString_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
 
 BENCHMARK_MAIN()

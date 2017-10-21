@@ -1,46 +1,67 @@
-#include <benchmark/benchmark.h>
+#include "common.h"
 #include <string>
 #include <sstream>
 
-static void Double_StringAppend(benchmark::State& state)
+static void PrettyPrintDouble_ToString(benchmark::State& state)
 {
-    while (state.KeepRunning())
+    auto bennchmark = [](int count) -> std::string
     {
         std::string str = "";
-        for(double i = 0; i < 20000.0; i++)
+        for(auto i = 0; i < count; i++)
         {
-            str += std::to_string(i);
+            str += std::to_string(static_cast<double>(i));
         }
+        return str;
+    };
+
+    while (state.KeepRunning())
+    {
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
     }
 }
-BENCHMARK(Double_StringAppend);
 
-static void Double_StringstreamAppend(benchmark::State& state)
+static void PrettyPrintDouble_StringStream(benchmark::State& state)
 {
-    while (state.KeepRunning())
+    auto bennchmark = [](int count) -> std::string
     {
         std::stringstream ss;
-        for(double i = 0; i < 20000.0; i++)
+        for(auto i = 0; i < count; i++)
         {
-            ss << i;
+            ss << static_cast<double>(i);
         }
-    }
-}
-BENCHMARK(Double_StringstreamAppend);
+        return ss.str();
+    };
 
-static void Double_OstringstreamAppend(benchmark::State& state)
-{
     while (state.KeepRunning())
     {
-        std::ostringstream ss;
-        for(double i = 0; i < 20000.0; i++)
-        {
-            ss << i;
-        }
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
+
     }
 }
-BENCHMARK(Double_OstringstreamAppend);
 
+static void PrettyPrintDouble_OstringStream(benchmark::State& state)
+{
+    auto bennchmark = [&](int count)-> std::string
+    {
+        std::ostringstream ss;
+        for(auto i = 0; i < count; i++)
+        {
+            ss << static_cast<double>(i);
+        }
+        return ss.str();
+    };
 
+    while (state.KeepRunning())
+    {
+        std::string ret = bennchmark(state.range(0));
+        static_cast<void>(ret);
+    }
+}
+
+BENCHMARK(PrettyPrintDouble_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintDouble_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintDouble_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
 
 BENCHMARK_MAIN()
