@@ -98,4 +98,4 @@ install:
   - ninja -v
 
 script:
-  - for file in bin/*; do $file; done
+  - cd .. && ./run.sh
