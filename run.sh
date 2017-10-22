@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mkdir -p build/reports
+mkdir -p build/mds
 
 for file in build/bin/*; do
 	report_name=$(basename ${file})
@@ -16,5 +17,14 @@ done
 
 for file in build/reports/*.csv; do
 	echo "post processing ${file}..."
-    python tools/postprocess.py ip_file=${file}
+	md_name=$(basename ${file})
+	md_path="build/mds/${md_name}.md"
+    build/bin/postprocess -ip=${file} -op=${md_path}
+done
+
+echo > README.md
+
+for file in build/mds/*.md; do
+	cat "$file" >> README.md
+	echo $'\n' >> README.md
 done

@@ -1,6 +1,6 @@
 language:
 - generic
-- python
+- golang
 dist: trusty
 sudo: required
 env:
@@ -87,16 +87,10 @@ before_install:
 - "$CXX --version"
 - if [ -n "$CLANG_VERSION" ]; then sudo PATH="${PATH}" CXX="$CXX" CC="$CC" ./install_libcxx.sh;
   fi
-- curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-- sudo apt-get install -y nodejs
-- npm install -g phantomjs-prebuilt
-- sudo pip install selenium
-- sudo pip install pandas
-- sudo pip install bokeh
-- sudo pip install pillow
+
 install:
 - mkdir -p build/bin
-- mkdir -p build/reports/processed
+- mkdir -p build/reports/mds
 - mkdir -p build && cd build
 - if [ "$GCC_VERSION" == "5" ]; then CXX_FLAGS="${CXX_FLAGS}"; fi
 - |
@@ -106,6 +100,7 @@ install:
   fi
 - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
 - ninja -v
+- go build -o bin/postprocess ../tools/postprocess.go
 
 script:
 - cd .. && ./run.sh

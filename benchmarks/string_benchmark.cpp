@@ -4,7 +4,7 @@
 
 #define LARGE_STRING "Use of static_assert in the body of a function will not lead to a substitution failure in template instantiation, thus making it impossible to create a trait that can distinguish between the intended and unintended use of the function. This paper discusses the current situation and possible solutions to allow custom diagnostics while at the same time enabling traits to test for usability of a function. The suggestion of this paper is to extend the syntax of deleted functions to allow custom diagnostics."
 
-static void PrettyPrintSmallString_ToString(benchmark::State& state)
+static void SmallString_ToString(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -25,7 +25,7 @@ static void PrettyPrintSmallString_ToString(benchmark::State& state)
     }
 }
 
-static void PrettyPrintSmallString_StringStream(benchmark::State& state)
+static void SmallString_StringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -46,7 +46,7 @@ static void PrettyPrintSmallString_StringStream(benchmark::State& state)
     }
 }
 
-static void PrettyPrintSmallString_OstringStream(benchmark::State& state)
+static void SmallString_OstringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -67,7 +67,7 @@ static void PrettyPrintSmallString_OstringStream(benchmark::State& state)
     }
 }
 
-static void PrettyPrintLargeString_ToString(benchmark::State& state)
+static void LargeString_ToString(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -88,7 +88,7 @@ static void PrettyPrintLargeString_ToString(benchmark::State& state)
     }
 }
 
-static void PrettyPrintLargeString_StringStream(benchmark::State& state)
+static void LargeString_StringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -109,7 +109,7 @@ static void PrettyPrintLargeString_StringStream(benchmark::State& state)
     }
 }
 
-static void PrettyPrintLargeString_OstringStream(benchmark::State& state)
+static void LargeString_OstringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -130,12 +130,12 @@ static void PrettyPrintLargeString_OstringStream(benchmark::State& state)
     }
 }
 
-BENCHMARK(PrettyPrintSmallString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintSmallString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintSmallString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(SmallString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(SmallString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(SmallString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
 
-BENCHMARK(PrettyPrintLargeString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
-BENCHMARK(PrettyPrintLargeString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
-BENCHMARK(PrettyPrintLargeString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
+BENCHMARK(LargeString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
+BENCHMARK(LargeString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
+BENCHMARK(LargeString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
 
 BENCHMARK_MAIN()

@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-static void PrettyPrintInt_ToString(benchmark::State& state)
+static void Int_ToString(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -23,7 +23,7 @@ static void PrettyPrintInt_ToString(benchmark::State& state)
     }
 }
 
-static void PrettyPrintInt_StringStream(benchmark::State& state)
+static void Int_StringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -45,7 +45,7 @@ static void PrettyPrintInt_StringStream(benchmark::State& state)
     }
 }
 
-static void PrettyPrintInt_OstringStream(benchmark::State& state)
+static void Int_OstringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -68,9 +68,9 @@ static void PrettyPrintInt_OstringStream(benchmark::State& state)
 }
 
 
-BENCHMARK(PrettyPrintInt_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintInt_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintInt_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Int_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Int_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Int_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
 
 
 BENCHMARK_MAIN()

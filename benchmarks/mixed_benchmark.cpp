@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 
-static void PrettyPrintMixed_ToString(benchmark::State& state)
+static void Mixed_ToString(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -27,7 +27,7 @@ static void PrettyPrintMixed_ToString(benchmark::State& state)
     }
 }
 
-static void PrettyPrintMixed_StringStream(benchmark::State& state)
+static void Mixed_StringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -51,7 +51,7 @@ static void PrettyPrintMixed_StringStream(benchmark::State& state)
     }
 }
 
-static void PrettyPrintMixed_OstringStream(benchmark::State& state)
+static void Mixed_OstringStream(benchmark::State& state)
 {
     auto benchmark = [&](int count) -> std::string
     {
@@ -75,8 +75,8 @@ static void PrettyPrintMixed_OstringStream(benchmark::State& state)
     }
 }
 
-BENCHMARK(PrettyPrintMixed_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintMixed_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(PrettyPrintMixed_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Mixed_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Mixed_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Mixed_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
 
 BENCHMARK_MAIN()
