@@ -1,13 +1,16 @@
-#include "common.h"
+#include <benchmark/benchmark.h>
 #include <string>
 #include <sstream>
 #include <algorithm>
 
 static void PrettyPrintMixed_ToString(benchmark::State& state)
 {
-    auto benchmark = [](int count) -> std::string
+    auto benchmark = [&](int count) -> std::string
     {
+        state.PauseTiming();
         std::string str = "";
+        state.ResumeTiming();
+
 		for(auto i = 0; i < count; i++)
 		{
 			str += std::to_string(10);
@@ -26,9 +29,12 @@ static void PrettyPrintMixed_ToString(benchmark::State& state)
 
 static void PrettyPrintMixed_StringStream(benchmark::State& state)
 {
-    auto benchmark = [](int count) -> std::string
+    auto benchmark = [&](int count) -> std::string
     {
+        state.PauseTiming();
         std::stringstream ss;
+        state.ResumeTiming();
+
 		for(auto i = 0; i < count; i++)
 		{
 			ss << 10;
@@ -47,10 +53,13 @@ static void PrettyPrintMixed_StringStream(benchmark::State& state)
 
 static void PrettyPrintMixed_OstringStream(benchmark::State& state)
 {
-    auto benchmark = [](int count) -> std::string
+    auto benchmark = [&](int count) -> std::string
     {
+        state.PauseTiming();
         std::ostringstream ss;
-		for(auto i = 0; i < count; i++)
+        state.ResumeTiming();
+
+        for(auto i = 0; i < count; i++)
 		{
 			ss << 10;
 			ss << "a simple string";
@@ -66,8 +75,8 @@ static void PrettyPrintMixed_OstringStream(benchmark::State& state)
     }
 }
 
-BENCHMARK(PrettyPrintMixed_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
-BENCHMARK(PrettyPrintMixed_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
-BENCHMARK(PrettyPrintMixed_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintMixed_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(PrettyPrintMixed_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(PrettyPrintMixed_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
 
 BENCHMARK_MAIN()

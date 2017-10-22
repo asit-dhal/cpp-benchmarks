@@ -1,15 +1,20 @@
-#include "common.h"
+#include <benchmark/benchmark.h>
 #include <string>
 #include <sstream>
 
 static void PrettyPrintDouble_ToString(benchmark::State& state)
 {
-    auto bennchmark = [](int count) -> std::string
+    auto bennchmark = [&](int count) -> std::string
     {
+        state.PauseTiming();
         std::string str = "";
+        state.ResumeTiming();
         for(auto i = 0; i < count; i++)
         {
-            str += std::to_string(static_cast<double>(i));
+            state.PauseTiming();
+            auto d = static_cast<double>(i);
+            state.ResumeTiming();
+            str += std::to_string(d);
         }
         return str;
     };
@@ -23,12 +28,17 @@ static void PrettyPrintDouble_ToString(benchmark::State& state)
 
 static void PrettyPrintDouble_StringStream(benchmark::State& state)
 {
-    auto bennchmark = [](int count) -> std::string
+    auto bennchmark = [&](int count) -> std::string
     {
+        state.PauseTiming();
         std::stringstream ss;
+        state.ResumeTiming();
         for(auto i = 0; i < count; i++)
         {
-            ss << static_cast<double>(i);
+            state.PauseTiming();
+            auto d = static_cast<double>(i);
+            state.ResumeTiming();
+            ss << d;
         }
         return ss.str();
     };
@@ -45,10 +55,16 @@ static void PrettyPrintDouble_OstringStream(benchmark::State& state)
 {
     auto bennchmark = [&](int count)-> std::string
     {
+        state.PauseTiming();
         std::ostringstream ss;
+        state.ResumeTiming();
+
         for(auto i = 0; i < count; i++)
         {
-            ss << static_cast<double>(i);
+            state.PauseTiming();
+            auto d = static_cast<double>(i);
+            state.ResumeTiming();
+            ss << d;
         }
         return ss.str();
     };
@@ -60,8 +76,8 @@ static void PrettyPrintDouble_OstringStream(benchmark::State& state)
     }
 }
 
-BENCHMARK(PrettyPrintDouble_ToString)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
-BENCHMARK(PrettyPrintDouble_StringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
-BENCHMARK(PrettyPrintDouble_OstringStream)->Apply(SmallArguments)->Apply(MediumArguments)->Apply(LargeArguments);
+BENCHMARK(PrettyPrintDouble_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(PrettyPrintDouble_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(PrettyPrintDouble_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
 
 BENCHMARK_MAIN()

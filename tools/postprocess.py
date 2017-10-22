@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 import pandas as pd
 from bokeh.plotting import figure, output_file, show
 from bokeh.palettes import Spectral11
@@ -9,8 +10,10 @@ import logging
 
 parser = argparse.ArgumentParser(description='Cleanup Benchmark reort')
 parser.add_argument('ip_file', metavar='N', type=str, help='input csv file name')
+#parser.add_argument('plot', metavar='N', type=bool, help='Plot benchmark')
 args = parser.parse_args()
 ip_file = args.ip_file
+#plot_flg = args.plot
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 	
@@ -24,6 +27,7 @@ def get_operation_type(operation_cnt):
 def cleanup_benchmark(file_name):
 	logger.info('processing file: %s', file_name)
 	df = pd.read_csv(file_name)
+	
 	# remove unwanted columns
 	unwanted_columns = ['time_unit', 'bytes_per_second', 'items_per_second',
 		'label','error_occurred','error_message', 'iterations']
@@ -71,8 +75,11 @@ def write_to_csv(df, path=None):
 		logger.info("exported png file: %s", processed_png_file_name)
 
 def main():
-	df = cleanup_benchmark(ip_file)
-	write_to_csv(df)
+	try:
+		df = cleanup_benchmark(ip_file)
+		write_to_csv(df)
+	except Exception as e:
+		logger.error('Error: %s', e)
 
 
 if __name__ == "__main__":

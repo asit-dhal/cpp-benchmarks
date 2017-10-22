@@ -16,5 +16,5 @@ done
 
 for file in build/reports/*.csv; do
 	echo "post processing ${file}..."
-    python tools/postprocess.py ${file}
+    python tools/postprocess.py ip_file=${file}
 done

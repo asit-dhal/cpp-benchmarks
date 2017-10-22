@@ -106,17 +106,6 @@ install:
   fi
 - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
 - ninja -v
+
 script:
 - cd .. && ./run.sh
-deploy:
-  provider: pages
-  api_key:
-    secure: qBcOdz50IqJVA6B8COSljsCgPqejeP52bIl0FZAg7JPDLgkH7WxJ72Q9NJDSsVV5oGpUdpzJwW7E9kMc13c1PgsX8wO224qCtmj1CMlXbdrSnVTD0zcsOVtBH8GNY231s1z7JZTVtoaFml5Es7fXscquw5wPtw1W3+T8grjtU3qq5gE/aqn3T7CoelhkMS+1vpuNSQRis2OySjCZxEuBJPlv9TgpW/iAJXulFoNs5TDeKowN7n2M3eCn8nCv27I5NLLoDRAHMiCisAbzUnN6oDo0hyLO9tT//iHeu5MIS/Y8an/H5Pt3B0DFoGFejdM2dk08rZivFnZjmRoj5KBuej99Y0mKAuOzNF7SKE6zOyRXj0sIJIE0jvp1+noAqa0avZPR3KGncCaRD5EG5i8A6Y59yALf3oBXm6Tu26o/vWZp6RYLVa18rzUqor4z7KLohbPd7ZG8hSMg68wGUukb66/S4dABpPBsog52U5okTf2Op46GRl4tZIioe6SusscSO5UipVpTSroiufzaH+rVMrQ7rYkscyCczOimAsXcaNwC2Is70JXUWaLrP9fAy4cGa2w53z/KoNQf59yCUtMVH9EfTh3xCJ2AriSQQbmVCmvlVvg3qXqDIPzJT5kfLAAM5si4s1TbJTd5CsMHYsOak1ZW3fKKlns3lRYS+Dchr9E=
-  file: build/reports/processed/*.*
-  file_glob: "true"
-  skip_cleanup: true
-  on:
-    repo: asit-dhal/cpp-benchmarks
-
-after_success:
-- sh set_tags.sh
