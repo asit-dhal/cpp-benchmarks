@@ -1,101 +1,122 @@
-language: generic
-
+language:
+- generic
+- python
 dist: trusty
 sudo: required
-
 env:
   global:
-    - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
-    - CMAKE_VERSION="3.9.1"
-
+  - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
+  - CMAKE_VERSION="3.9.1"
 cache:
   directories:
-    - ${DEPS_DIR}/cmake-${CMAKE_VERSION}
-
+  - "${DEPS_DIR}/cmake-${CMAKE_VERSION}"
+python:
+- '2.7'
 matrix:
-    include:
-    - os: linux
-      compiler: gcc
-      env: GCC_VERSION=7
-        - CC=gcc-7
-        - CXX=g++-7
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-7']
-
-    - os: linux
-      compiler: gcc
-      env: GCC_VERSION=6
-        - CC=gcc-6
-        - CXX=g++-6
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6']
-
-    - os: linux
-      compiler: gcc
-      env: GCC_VERSION=5
-        - CC=gcc-5
-        - CXX=g++-5
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5']
-
-    - os: linux
-      compiler: clang
-      env: CLANG_VERSION=3.9 LIBCXX=On
-        - CC=clang-3.9
-        - CXX=clang++-3.9
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.9']
-          packages: ['clang-3.9', 'g++-6']
-
-    - os: linux
-      compiler: clang
-      env: CLANG_VERSION=3.8 LIBCXX=On
-        - CC=clang-3.8
-        - CXX=clang++-3.8
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-3.8']
-          packages: ['clang-3.8', 'g++-6']
-
+  include:
+  - os: linux
+    compiler: gcc
+    env: GCC_VERSION=7 - CC=gcc-7 - CXX=g++-7
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-7
+  - os: linux
+    compiler: gcc
+    env: GCC_VERSION=6 - CC=gcc-6 - CXX=g++-6
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-6
+  - os: linux
+    compiler: gcc
+    env: GCC_VERSION=5 - CC=gcc-5 - CXX=g++-5
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-5
+  - os: linux
+    compiler: clang
+    env: CLANG_VERSION=3.9 LIBCXX=On - CC=clang-3.9 - CXX=clang++-3.9
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        - llvm-toolchain-trusty-3.9
+        packages:
+        - clang-3.9
+        - g++-6
+  - os: linux
+    compiler: clang
+    env: CLANG_VERSION=3.8 LIBCXX=On - CC=clang-3.8 - CXX=clang++-3.8
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        - llvm-toolchain-trusty-3.8
+        packages:
+        - clang-3.8
+        - g++-6
 before_install:
-  - export CHECKOUT_PATH=`pwd`;
-  - |
-    if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-      if [ -z "$(ls -A ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached)" ]; then
-        CMAKE_URL="https://cmake.org/files/v3.9/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
-        mkdir -p ${DEPS_DIR}/cmake-${CMAKE_VERSION}
-        travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C ${DEPS_DIR}/cmake-${CMAKE_VERSION}
-        touch ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached
-      else
-        echo "Using cached cmake version ${CMAKE_VERSION}."
-      fi
-      export PATH="${DEPS_DIR}/cmake-${CMAKE_VERSION}/bin:${PATH}"
-      sudo apt-get install ninja-build
+- export CHECKOUT_PATH=`pwd`;
+- |
+  if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+    if [ -z "$(ls -A ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached)" ]; then
+      CMAKE_URL="https://cmake.org/files/v3.9/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+      mkdir -p ${DEPS_DIR}/cmake-${CMAKE_VERSION}
+      travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C ${DEPS_DIR}/cmake-${CMAKE_VERSION}
+      touch ${DEPS_DIR}/cmake-${CMAKE_VERSION}/cached
+    else
+      echo "Using cached cmake version ${CMAKE_VERSION}."
     fi
-  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
-  - if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}"; fi
-  - which $CXX
-  - which $CC
-  - $CXX --version
-  - if [ -n "$CLANG_VERSION" ]; then sudo PATH="${PATH}" CXX="$CXX" CC="$CC" ./install_libcxx.sh; fi
-
+    export PATH="${DEPS_DIR}/cmake-${CMAKE_VERSION}/bin:${PATH}"
+    sudo apt-get install ninja-build
+  fi
+- if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}";
+  fi
+- if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}";
+  fi
+- which $CXX
+- which $CC
+- "$CXX --version"
+- if [ -n "$CLANG_VERSION" ]; then sudo PATH="${PATH}" CXX="$CXX" CC="$CC" ./install_libcxx.sh;
+  fi
+- curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+- sudo apt-get install -y nodejs
+- npm install -g phantomjs-prebuilt
+- sudo pip install selenium
+- sudo pip install pandas
+- sudo pip install bokeh
+- sudo pip install pillow
 install:
-  - mkdir -p build && cd build
-  - if [ "$GCC_VERSION" == "5" ]; then CXX_FLAGS="${CXX_FLAGS}"; fi
-  - |
-    if [ "$LIBCXX" == "On" ]; then
-      CXX_FLAGS="${CXX_FLAGS} -stdlib=libc++ -nostdinc++ -cxx-isystem /usr/include/c++/v1/ -Wno-unused-command-line-argument"
-      CXX_LINKER_FLAGS="${CXX_LINKER_FLAGS} -lc++abi"
-    fi
-  - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
-  - ninja -v
-
+- mkdir -p build/bin
+- mkdir -p build/reports/processed
+- mkdir -p build && cd build
+- if [ "$GCC_VERSION" == "5" ]; then CXX_FLAGS="${CXX_FLAGS}"; fi
+- |
+  if [ "$LIBCXX" == "On" ]; then
+    CXX_FLAGS="${CXX_FLAGS} -stdlib=libc++ -nostdinc++ -cxx-isystem /usr/include/c++/v1/ -Wno-unused-command-line-argument"
+    CXX_LINKER_FLAGS="${CXX_LINKER_FLAGS} -lc++abi"
+  fi
+- cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
+- ninja -v
 script:
-  - cd .. && ./run.sh
+- cd .. && ./run.sh
+deploy:
+  provider: pages
+  api_key:
+    secure: qBcOdz50IqJVA6B8COSljsCgPqejeP52bIl0FZAg7JPDLgkH7WxJ72Q9NJDSsVV5oGpUdpzJwW7E9kMc13c1PgsX8wO224qCtmj1CMlXbdrSnVTD0zcsOVtBH8GNY231s1z7JZTVtoaFml5Es7fXscquw5wPtw1W3+T8grjtU3qq5gE/aqn3T7CoelhkMS+1vpuNSQRis2OySjCZxEuBJPlv9TgpW/iAJXulFoNs5TDeKowN7n2M3eCn8nCv27I5NLLoDRAHMiCisAbzUnN6oDo0hyLO9tT//iHeu5MIS/Y8an/H5Pt3B0DFoGFejdM2dk08rZivFnZjmRoj5KBuej99Y0mKAuOzNF7SKE6zOyRXj0sIJIE0jvp1+noAqa0avZPR3KGncCaRD5EG5i8A6Y59yALf3oBXm6Tu26o/vWZp6RYLVa18rzUqor4z7KLohbPd7ZG8hSMg68wGUukb66/S4dABpPBsog52U5okTf2Op46GRl4tZIioe6SusscSO5UipVpTSroiufzaH+rVMrQ7rYkscyCczOimAsXcaNwC2Is70JXUWaLrP9fAy4cGa2w53z/KoNQf59yCUtMVH9EfTh3xCJ2AriSQQbmVCmvlVvg3qXqDIPzJT5kfLAAM5si4s1TbJTd5CsMHYsOak1ZW3fKKlns3lRYS+Dchr9E=
+  file: build/reports/processed/*.*
+  file_glob: "true"
+  skip_cleanup: true
+  on:
+    repo: asit-dhal/cpp-benchmarks
+
+after_success:
+- sh set_tags.sh
