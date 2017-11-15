@@ -1,6 +1,5 @@
 language:
 - generic
-- golang
 dist: trusty
 sudo: required
 env:
@@ -21,8 +20,10 @@ matrix:
       apt:
         sources:
         - ubuntu-toolchain-r-test
+        - boost-latest
         packages:
         - g++-7
+        - libboost-all-dev
   - os: linux
     compiler: gcc
     env: GCC_VERSION=6 - CC=gcc-6 - CXX=g++-6
@@ -30,8 +31,10 @@ matrix:
       apt:
         sources:
         - ubuntu-toolchain-r-test
+        - boost-latest
         packages:
         - g++-6
+        - libboost-all-dev
   - os: linux
     compiler: gcc
     env: GCC_VERSION=5 - CC=gcc-5 - CXX=g++-5
@@ -39,8 +42,10 @@ matrix:
       apt:
         sources:
         - ubuntu-toolchain-r-test
+        - boost-latest
         packages:
         - g++-5
+        - libboost-all-dev
   - os: linux
     compiler: clang
     env: CLANG_VERSION=3.9 LIBCXX=On - CC=clang-3.9 - CXX=clang++-3.9
@@ -49,9 +54,11 @@ matrix:
         sources:
         - ubuntu-toolchain-r-test
         - llvm-toolchain-trusty-3.9
+        - boost-latest
         packages:
         - clang-3.9
         - g++-6
+        - libboost-all-dev
   - os: linux
     compiler: clang
     env: CLANG_VERSION=3.8 LIBCXX=On - CC=clang-3.8 - CXX=clang++-3.8
@@ -60,9 +67,11 @@ matrix:
         sources:
         - ubuntu-toolchain-r-test
         - llvm-toolchain-trusty-3.8
+        - boost-latest
         packages:
         - clang-3.8
         - g++-6
+        - libboost-all-dev
 before_install:
 - export CHECKOUT_PATH=`pwd`;
 - |
@@ -90,7 +99,6 @@ before_install:
 
 install:
 - mkdir -p build/bin
-- mkdir -p build/reports/mds
 - mkdir -p build && cd build
 - if [ "$GCC_VERSION" == "5" ]; then CXX_FLAGS="${CXX_FLAGS}"; fi
 - |
@@ -100,7 +108,6 @@ install:
   fi
 - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DRUN_HAVE_POSIX_REGEX=0
 - ninja -v
-- go build -o bin/postprocess ../tools/postprocess.go
 
 script:
 - cd .. && ./run.sh
