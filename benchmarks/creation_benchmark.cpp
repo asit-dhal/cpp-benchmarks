@@ -7,7 +7,7 @@ static void String_Creation(benchmark::State& state)
 
     auto benchmark = []() -> std::string
     {
-        std::string str = "";
+        std::string str = std::to_string(1);
         return str;
     };
 
@@ -23,6 +23,7 @@ static void StringStream_Creation(benchmark::State& state)
     auto benchmark = []() -> std::string
     {
         std::stringstream ss;
+		ss << 1;
         return ss.str();
     };
 
@@ -38,6 +39,7 @@ static void OstringStream_Creation(benchmark::State& state)
     auto benchmark = []() -> std::string
     {
         std::ostringstream ss;
+		ss << 1;
         return ss.str();
     };
 

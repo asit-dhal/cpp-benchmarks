@@ -2,6 +2,17 @@ find_package(Threads REQUIRED)
 
 add_library(benchmark::benchmark ALIAS benchmark)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.58.0)
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+else()
+    message("Failed to find boost in the system, build may fail")
+endif()
+
 add_executable(string_benchmark string_benchmark.cpp)
 target_link_libraries(string_benchmark
   benchmark::benchmark
@@ -36,3 +47,14 @@ add_executable(creation_benchmark creation_benchmark.cpp)
 target_link_libraries(creation_benchmark
   benchmark::benchmark
 )
+
+#add_executable(boost_lexical_cast boost_lexical_cast.cpp)
+#target_link_libraries(boost_lexical_cast
+#  benchmark::benchmark
+##)
+
+add_executable(int2str int2str.cpp)
+target_link_libraries(int2str
+  benchmark::benchmark
+)
+

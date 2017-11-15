@@ -4,33 +4,31 @@
 
 #include <boost/lexical_cast.hpp>
 
-static void Int_ToString(benchmark::State& state)
+static void Str2Int_std(benchmark::State& state)
 {
-    auto benchmark = [&](int count) -> std::string
+    auto benchmark = [&]() -> int
     {
         state.PauseTiming();
-        std::string str = "";
+        std::string str = "232";
         state.ResumeTiming();
-        for(auto i = 0; i < count; i++)
-        {
-            str += std::to_string(i);
-        }
-        return str;
+        int a = std::strtoi(str);
+        return a;
     };
-    
+
     while (state.KeepRunning())
     {
-        std::string ret = benchmark(state.range(0));
+        int ret = benchmark();
         static_cast<void>(ret);
     }
 }
 
-static void Int_StringStream(benchmark::State& state)
+static void Str2Int_Stringstream(benchmark::State& state)
 {
-    auto benchmark = [&](int count) -> std::string
+    auto benchmark = [&]() -> int
     {
         state.PauseTiming();
         std::stringstream ss;
+        std::string str = "232";
         state.ResumeTiming();
 
         for(auto i = 0; i < count; i++)
