@@ -48,13 +48,12 @@ target_link_libraries(creation_benchmark
   benchmark::benchmark
 )
 
-#add_executable(boost_lexical_cast boost_lexical_cast.cpp)
-#target_link_libraries(boost_lexical_cast
-#  benchmark::benchmark
-##)
-
-add_executable(int2str int2str.cpp)
-target_link_libraries(int2str
+add_executable(str2int str2int.cpp)
+target_link_libraries(str2int
   benchmark::benchmark
 )
 
+add_executable(str2double str2double.cpp)
+target_link_libraries(str2double
+  benchmark::benchmark
+)
