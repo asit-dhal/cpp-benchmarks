@@ -13,38 +13,38 @@ else()
     message("Failed to find boost in the system, build may fail")
 endif()
 
-add_executable(string_benchmark string_benchmark.cpp)
-target_link_libraries(string_benchmark
+add_executable(string_concat string_concat.cpp)
+target_link_libraries(string_concat
   benchmark::benchmark
 )
 
-add_executable(int_benchmark int_benchmark.cpp)
-target_link_libraries(int_benchmark
+add_executable(int2str int2str.cpp)
+target_link_libraries(int2str
   benchmark::benchmark
 )
 
-add_executable(double_benchmark double_benchmark.cpp)
-target_link_libraries(double_benchmark
+add_executable(double2str double2str.cpp)
+target_link_libraries(double2str
   benchmark::benchmark
 )
 
-add_executable(bool_benchmark bool_benchmark.cpp)
-target_link_libraries(bool_benchmark
+add_executable(bool2str bool2str.cpp)
+target_link_libraries(bool2str
   benchmark::benchmark
 )
 
-add_executable(mixed_benchmark mixed_benchmark.cpp)
-target_link_libraries(mixed_benchmark
+add_executable(mixed2str mixed2str.cpp)
+target_link_libraries(mixed2str
   benchmark::benchmark
 )
 
-add_executable(vector_array_benchmark vector_array_benchmark.cpp)
-target_link_libraries(vector_array_benchmark
+add_executable(vector_array vector_array.cpp)
+target_link_libraries(vector_array
   benchmark::benchmark
 )
 
-add_executable(creation_benchmark creation_benchmark.cpp)
-target_link_libraries(creation_benchmark
+add_executable(creation creation.cpp)
+target_link_libraries(creation
   benchmark::benchmark
 )
 
