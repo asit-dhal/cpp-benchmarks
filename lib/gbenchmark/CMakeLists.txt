@@ -25,4 +25,9 @@ set_target_properties(benchmark
 	PROPERTIES POSITION_INDEPENDENT_CODE ON
 )
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  target_link_libraries(benchmark Shlwapi)
+endif()
+
+
 target_link_libraries(benchmark)
