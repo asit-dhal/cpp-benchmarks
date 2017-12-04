@@ -57,3 +57,13 @@ add_executable(str2double str2double.cpp)
 target_link_libraries(str2double
   benchmark::benchmark
 )
+
+add_executable(struct_pair struct_pair.cpp)
+target_link_libraries(struct_pair
+  benchmark::benchmark
+)
+
+add_executable(smart_ptr smart_ptr.cpp)
+target_link_libraries(smart_ptr
+  benchmark::benchmark
+)

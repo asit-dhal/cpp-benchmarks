@@ -100,9 +100,9 @@ static void Mixed_BoostLexicalCast(benchmark::State& state)
     }
 }
 
-BENCHMARK(Mixed_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Mixed_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Mixed_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Mixed_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Mixed_ToString)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Mixed_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Mixed_StringStream)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Mixed_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6);
 
 BENCHMARK_MAIN()

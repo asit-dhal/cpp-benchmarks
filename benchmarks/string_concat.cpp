@@ -130,12 +130,12 @@ static void LargeString_OstringStream(benchmark::State& state)
     }
 }
 
-BENCHMARK(SmallString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(SmallString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(SmallString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(SmallString_ToString)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(SmallString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(SmallString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6);
 
-BENCHMARK(LargeString_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
-BENCHMARK(LargeString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
-BENCHMARK(LargeString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(1000000);
+BENCHMARK(LargeString_ToString)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(LargeString_StringStream)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(LargeString_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6);
 
 BENCHMARK_MAIN()

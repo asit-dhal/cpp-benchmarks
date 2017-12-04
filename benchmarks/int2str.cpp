@@ -90,10 +90,10 @@ static void Int_BoostLexicalCast(benchmark::State& state)
     }
 }
 
-BENCHMARK(Int_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Int_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Int_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Int_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Int_ToString)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Int_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Int_StringStream)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Int_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6);
 
 
 BENCHMARK_MAIN()

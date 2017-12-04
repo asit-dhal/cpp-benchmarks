@@ -93,9 +93,9 @@ static void Bool_BoostLexicalCast(benchmark::State& state)
     }
 }
 
-BENCHMARK(Bool_ToString)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Bool_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Bool_StringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
-BENCHMARK(Bool_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6)->Arg(10000000);
+BENCHMARK(Bool_ToString)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Bool_BoostLexicalCast)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Bool_StringStream)->RangeMultiplier(2)->Range(8, 8<<6);
+BENCHMARK(Bool_OstringStream)->RangeMultiplier(2)->Range(8, 8<<6);
 
 BENCHMARK_MAIN()
